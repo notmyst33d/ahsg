@@ -1,10 +1,10 @@
-short_name = "godot"
-name = "Godot Engine"
+short_name = "ahsg"
+name = "Alter Heaven Stripped Godot"
 major = 3
 minor = 5
 patch = 1
-status = "stable"
+status = "ahsg"
 module_config = ""
 year = 2022
-website = "https://godotengine.org"
+website = "https://github.com/notmyst33d/ahsg"
 docs = "3.5"
