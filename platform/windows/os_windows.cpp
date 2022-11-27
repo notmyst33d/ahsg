@@ -3576,37 +3576,37 @@ String OS_Windows::get_godot_dir_name() const {
 }
 
 String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const {
-	KNOWNFOLDERID id;
+	int id;
 
 	switch (p_dir) {
 		case SYSTEM_DIR_DESKTOP: {
-			id = FOLDERID_Desktop;
+			id = CSIDL_DESKTOP;
 		} break;
 		case SYSTEM_DIR_DCIM: {
-			id = FOLDERID_Pictures;
+			id = CSIDL_MYPICTURES;
 		} break;
 		case SYSTEM_DIR_DOCUMENTS: {
-			id = FOLDERID_Documents;
+			id = CSIDL_MYDOCUMENTS;
 		} break;
 		case SYSTEM_DIR_DOWNLOADS: {
-			id = FOLDERID_Downloads;
+			id = CSIDL_MYDOCUMENTS;
 		} break;
 		case SYSTEM_DIR_MOVIES: {
-			id = FOLDERID_Videos;
+			id = CSIDL_MYVIDEO;
 		} break;
 		case SYSTEM_DIR_MUSIC: {
-			id = FOLDERID_Music;
+			id = CSIDL_MYMUSIC;
 		} break;
 		case SYSTEM_DIR_PICTURES: {
-			id = FOLDERID_Pictures;
+			id = CSIDL_MYPICTURES;
 		} break;
 		case SYSTEM_DIR_RINGTONES: {
-			id = FOLDERID_Music;
+			id = CSIDL_MYMUSIC;
 		} break;
 	}
 
-	PWSTR szPath;
-	HRESULT res = SHGetKnownFolderPath(id, 0, NULL, &szPath);
+	LPWSTR szPath;
+	HRESULT res = SHGetFolderPathW(hWnd, id, NULL, 0, (LPWSTR)&szPath);
 	ERR_FAIL_COND_V(res != S_OK, String());
 	String path = String(szPath).replace("\\", "/");
 	CoTaskMemFree(szPath);
