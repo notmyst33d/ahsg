@@ -5,6 +5,7 @@ scons \
     CXX=x86_64-w64-mingw32-g++ \
     LINK=x86_64-w64-mingw32-g++ \
     arch=x64 \
+    bits=64 \
     platform=windows \
     target=release \
     optimize=size \

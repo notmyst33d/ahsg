@@ -2,6 +2,7 @@
 scons \
     -j$(nproc --all) \
     arch=x64 \
+    bits=64 \
     platform=x11 \
     target=release \
     optimize=size \
