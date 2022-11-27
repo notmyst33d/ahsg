@@ -3477,7 +3477,7 @@ String OS_Windows::keyboard_get_layout_name(int p_index) const {
 
 		wchar_t name[1024];
 		memset(name, 0, 1024 * sizeof(wchar_t));
-		GetLocaleInfoEx(buf, LOCALE_SLOCALIZEDDISPLAYNAME, (LPWSTR)&name, 1024);
+		GetLocaleInfoW(MAKELCID(LOWORD(layouts[p_index]), SORT_DEFAULT), LOCALE_SLOCALIZEDDISPLAYNAME, (LPWSTR)&name, 1024);
 
 		ret = String(name);
 	}
