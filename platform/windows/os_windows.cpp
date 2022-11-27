@@ -809,7 +809,6 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
 		case WM_MOUSEWHEEL:
-		case WM_MOUSEHWHEEL:
 		case WM_LBUTTONDBLCLK:
 		case WM_MBUTTONDBLCLK:
 		case WM_RBUTTONDBLCLK:
@@ -872,19 +871,6 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 					}
 					mb->set_factor(fabs((double)motion / (double)WHEEL_DELTA));
 				} break;
-				case WM_MOUSEHWHEEL: {
-					mb->set_pressed(true);
-					int motion = (short)HIWORD(wParam);
-					if (!motion)
-						return 0;
-
-					if (motion < 0) {
-						mb->set_button_index(BUTTON_WHEEL_LEFT);
-					} else {
-						mb->set_button_index(BUTTON_WHEEL_RIGHT);
-					}
-					mb->set_factor(fabs((double)motion / (double)WHEEL_DELTA));
-				} break;
 				case WM_XBUTTONDOWN: {
 					mb->set_pressed(true);
 					if (HIWORD(wParam) == XBUTTON1)
@@ -928,7 +914,7 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 				mb->set_position(Vector2(old_x, old_y));
 			}
 
-			if (uMsg != WM_MOUSEWHEEL && uMsg != WM_MOUSEHWHEEL) {
+			if (uMsg != WM_MOUSEWHEEL) {
 				if (mb->is_pressed()) {
 					if (++pressrc > 0 && mouse_mode != MOUSE_MODE_CAPTURED)
 						SetCapture(hWnd);
@@ -1067,41 +1053,6 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		} break;
 		case WM_INPUTLANGCHANGEREQUEST: {
 			// FIXME: Do something?
-		} break;
-
-		case WM_TOUCH: {
-			BOOL bHandled = FALSE;
-			UINT cInputs = LOWORD(wParam);
-			PTOUCHINPUT pInputs = memnew_arr(TOUCHINPUT, cInputs);
-			if (pInputs) {
-				if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))) {
-					for (UINT i = 0; i < cInputs; i++) {
-						TOUCHINPUT ti = pInputs[i];
-						POINT touch_pos = {
-							TOUCH_COORD_TO_PIXEL(ti.x),
-							TOUCH_COORD_TO_PIXEL(ti.y),
-						};
-						ScreenToClient(hWnd, &touch_pos);
-						//do something with each touch input entry
-						if (ti.dwFlags & TOUCHEVENTF_MOVE) {
-							_drag_event(touch_pos.x, touch_pos.y, ti.dwID);
-						} else if (ti.dwFlags & (TOUCHEVENTF_UP | TOUCHEVENTF_DOWN)) {
-							_touch_event(ti.dwFlags & TOUCHEVENTF_DOWN, touch_pos.x, touch_pos.y, ti.dwID);
-						};
-					}
-					bHandled = TRUE;
-				} else {
-					/* handle the error here */
-				}
-				memdelete_arr(pInputs);
-			} else {
-				/* handle the error here, probably out of memory */
-			}
-			if (bHandled) {
-				CloseTouchInputHandle((HTOUCHINPUT)lParam);
-				return 0;
-			};
-
 		} break;
 
 		case WM_DEVICECHANGE: {
@@ -1609,8 +1560,6 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 	tme.hwndTrack = hWnd;
 	tme.dwHoverTime = HOVER_DEFAULT;
 	TrackMouseEvent(&tme);
-
-	RegisterTouchWindow(hWnd, 0);
 
 	DragAcceptFiles(hWnd, true);
 
