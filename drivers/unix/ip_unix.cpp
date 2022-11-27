@@ -89,7 +89,11 @@ void IP_Unix::_resolve_hostname(List<IP_Address> &r_addresses, const String &p_h
 		hints.ai_flags = 0;
 	} else {
 		hints.ai_family = AF_UNSPEC;
+#if _WIN32_WINNT < 0x0601
+        hints.ai_flags = 0;
+#else
 		hints.ai_flags = AI_ADDRCONFIG;
+#endif
 	};
 	hints.ai_flags &= ~AI_NUMERICHOST;
 
