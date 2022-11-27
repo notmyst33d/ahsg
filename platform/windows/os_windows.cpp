@@ -3345,7 +3345,6 @@ String OS_Windows::keyboard_get_layout_language(int p_index) const {
 
 	wchar_t buf[LOCALE_NAME_MAX_LENGTH];
 	memset(buf, 0, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t));
-	LCIDToLocaleName(MAKELCID(LOWORD(layouts[p_index]), SORT_DEFAULT), buf, LOCALE_NAME_MAX_LENGTH, 0);
 
 	memfree(layouts);
 
@@ -3421,7 +3420,6 @@ String OS_Windows::keyboard_get_layout_name(int p_index) const {
 	if (ret == String()) {
 		wchar_t buf[LOCALE_NAME_MAX_LENGTH];
 		memset(buf, 0, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t));
-		LCIDToLocaleName(MAKELCID(LOWORD(layouts[p_index]), SORT_DEFAULT), buf, LOCALE_NAME_MAX_LENGTH, 0);
 
 		wchar_t name[1024];
 		memset(name, 0, 1024 * sizeof(wchar_t));
