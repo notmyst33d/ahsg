@@ -69,10 +69,6 @@ RasterizerScene *RasterizerGLES3::get_scene() {
 #define _EXT_DEBUG_SEVERITY_LOW_ARB 0x9148
 #define _EXT_DEBUG_OUTPUT 0x92E0
 
-#if defined(MINGW_ENABLED) || defined(_MSC_VER)
-#define strcpy strcpy_s
-#endif
-
 #ifdef GLAD_ENABLED
 // Restricting to GLAD as only used in initialize() with GLAD_GL_ARB_debug_output
 static void GLAPIENTRY _gl_debug_print(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const GLvoid *userParam) {

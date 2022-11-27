@@ -53,10 +53,6 @@
 #include <stdlib.h>
 #endif
 
-#if defined(MINGW_ENABLED) || defined(_MSC_VER)
-#define snprintf _snprintf_s
-#endif
-
 #define MAX_DIGITS 6
 #define UPPERCASE(m_c) (((m_c) >= 'a' && (m_c) <= 'z') ? ((m_c) - ('a' - 'A')) : (m_c))
 #define LOWERCASE(m_c) (((m_c) >= 'A' && (m_c) <= 'Z') ? ((m_c) + ('a' - 'A')) : (m_c))

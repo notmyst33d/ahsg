@@ -80,10 +80,6 @@
 #include <EGL/eglext.h>
 #endif
 
-#if defined(MINGW_ENABLED) || defined(_MSC_VER)
-#define strcpy strcpy_s
-#endif
-
 #ifdef CAN_DEBUG
 static void GLAPIENTRY _gl_debug_print(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const GLvoid *userParam) {
 	if (type == _EXT_DEBUG_TYPE_OTHER_ARB) {
