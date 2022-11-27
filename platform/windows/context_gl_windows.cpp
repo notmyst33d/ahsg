@@ -34,8 +34,6 @@
 
 #include "context_gl_windows.h"
 
-#include <dwmapi.h>
-
 #define WGL_CONTEXT_MAJOR_VERSION_ARB 0x2091
 #define WGL_CONTEXT_MINOR_VERSION_ARB 0x2092
 #define WGL_CONTEXT_FLAGS_ARB 0x2094
@@ -87,18 +85,6 @@ int ContextGL_Windows::get_window_height() {
 }
 
 bool ContextGL_Windows::should_vsync_via_compositor() {
-	if (OS::get_singleton()->is_window_fullscreen() || !OS::get_singleton()->is_vsync_via_compositor_enabled()) {
-		return false;
-	}
-
-	// Note: All Windows versions supported by Godot have a compositor.
-	// It can be disabled on earlier Windows versions.
-	BOOL dwm_enabled;
-
-	if (SUCCEEDED(DwmIsCompositionEnabled(&dwm_enabled))) {
-		return dwm_enabled;
-	}
-
 	return false;
 }
 
@@ -109,7 +95,6 @@ void ContextGL_Windows::swap_buffers() {
 		bool vsync_via_compositor_now = should_vsync_via_compositor();
 
 		if (vsync_via_compositor_now && wglGetSwapIntervalEXT() == 0) {
-			DwmFlush();
 		}
 
 		if (vsync_via_compositor_now != vsync_via_compositor) {

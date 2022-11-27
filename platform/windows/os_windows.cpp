@@ -2270,32 +2270,7 @@ bool OS_Windows::get_window_per_pixel_transparency_enabled() const {
 }
 
 void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
-	if (!is_layered_allowed())
-		return;
-	if (layered_window != p_enabled) {
-		if (p_enabled) {
-			//enable per-pixel alpha
-
-			DWM_BLURBEHIND bb = { 0 };
-			HRGN hRgn = CreateRectRgn(0, 0, -1, -1);
-			bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
-			bb.hRgnBlur = hRgn;
-			bb.fEnable = TRUE;
-			DwmEnableBlurBehindWindow(hWnd, &bb);
-
-			layered_window = true;
-		} else {
-			//disable per-pixel alpha
-			layered_window = false;
-
-			DWM_BLURBEHIND bb = { 0 };
-			HRGN hRgn = CreateRectRgn(0, 0, -1, -1);
-			bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
-			bb.hRgnBlur = hRgn;
-			bb.fEnable = FALSE;
-			DwmEnableBlurBehindWindow(hWnd, &bb);
-		}
-	}
+    return;
 }
 
 void OS_Windows::set_borderless_window(bool p_borderless) {

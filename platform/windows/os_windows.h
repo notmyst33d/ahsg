@@ -49,7 +49,6 @@
 #include "drivers/xaudio2/audio_driver_xaudio2.h"
 #endif
 
-#include <dwmapi.h>
 #include <fcntl.h>
 #include <io.h>
 #include <shellapi.h>
