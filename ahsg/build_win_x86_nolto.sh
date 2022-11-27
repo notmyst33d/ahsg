@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+scons \
+    -j$(nproc --all) \
+    CC=i686-w64-mingw32-gcc \
+    CXX=i686-w64-mingw32-g++ \
+    LINK=i686-w64-mingw32-g++ \
+    arch=x86 \
+    bits=32 \
+    platform=windows \
+    target=release \
+    optimize=size \
+    tools=no \
+    debug_symbols=no \
+    disable_3d=yes \
+    $(cat ahsg/flags.txt) \
+    $@
