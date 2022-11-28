@@ -62,17 +62,11 @@ int AudioDriverRtAudio::callback(void *outputBuffer, void *inputBuffer, unsigned
 
 	AudioDriverRtAudio *self = (AudioDriverRtAudio *)userData;
 
-	if (self->mutex->try_lock() != OK) {
-		// what should i do..
-		for (unsigned int i = 0; i < nBufferFrames; i++)
-			buffer[i] = 0;
-
-		return 0;
-	}
+	self->lock();
 
 	self->audio_server_process(nBufferFrames, buffer);
 
-	self->mutex->unlock();
+	self->unlock();
 
 	return 0;
 }
@@ -80,10 +74,8 @@ int AudioDriverRtAudio::callback(void *outputBuffer, void *inputBuffer, unsigned
 Error AudioDriverRtAudio::init() {
 
 	active = false;
-	mutex = Mutex::create(true);
 	dac = memnew(RtAudio);
 
-	ERR_EXPLAIN("Cannot initialize RtAudio audio driver: No devices present.")
 	ERR_FAIL_COND_V(dac->getDeviceCount() < 1, ERR_UNAVAILABLE);
 
 	// FIXME: Adapt to the OutputFormat -> SpeakerMode change
@@ -108,9 +100,9 @@ Error AudioDriverRtAudio::init() {
 	options.numberOfBuffers = 4;
 
 	parameters.firstChannel = 0;
-	mix_rate = GLOBAL_DEF_RST("audio/mix_rate", DEFAULT_MIX_RATE);
+	mix_rate = GLOBAL_GET("audio/mix_rate");
 
-	int latency = GLOBAL_DEF("audio/output_latency", DEFAULT_OUTPUT_LATENCY);
+	int latency = GLOBAL_GET("audio/output_latency");
 	unsigned int buffer_frames = closest_power_of_2(latency * mix_rate / 1000);
 	print_verbose("Audio buffer frames: " + itos(buffer_frames) + " calculated latency: " + itos(buffer_frames * 1000 / mix_rate) + "ms");
 
@@ -164,15 +156,11 @@ void AudioDriverRtAudio::start() {
 }
 
 void AudioDriverRtAudio::lock() {
-
-	if (mutex)
-		mutex->lock();
+	mutex.lock();
 }
 
 void AudioDriverRtAudio::unlock() {
-
-	if (mutex)
-		mutex->unlock();
+	mutex.unlock();
 }
 
 void AudioDriverRtAudio::finish() {
@@ -184,10 +172,6 @@ void AudioDriverRtAudio::finish() {
 	}
 	unlock();
 
-	if (mutex) {
-		memdelete(mutex);
-		mutex = NULL;
-	}
 	if (dac) {
 		memdelete(dac);
 		dac = NULL;
@@ -196,9 +180,8 @@ void AudioDriverRtAudio::finish() {
 
 AudioDriverRtAudio::AudioDriverRtAudio() :
 		speaker_mode(SPEAKER_MODE_STEREO),
-		mutex(NULL),
 		dac(NULL),
-		mix_rate(DEFAULT_MIX_RATE),
+		mix_rate(0),
 		active(false) {
 }
 

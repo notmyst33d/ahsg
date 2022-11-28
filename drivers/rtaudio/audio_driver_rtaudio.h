@@ -42,7 +42,7 @@ class AudioDriverRtAudio : public AudioDriver {
 	static int callback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 			double streamTime, RtAudioStreamStatus status, void *userData);
 	SpeakerMode speaker_mode;
-	Mutex *mutex;
+	Mutex mutex;
 	RtAudio *dac;
 	int mix_rate;
 	bool active;
