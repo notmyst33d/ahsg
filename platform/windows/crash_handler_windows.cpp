@@ -35,6 +35,7 @@
 #include "core/project_settings.h"
 #include "core/version.h"
 #include "main/main.h"
+#include "os_windows.h"
 
 #ifdef CRASH_HANDLER_EXCEPTION
 

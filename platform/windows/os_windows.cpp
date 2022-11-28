@@ -3862,6 +3862,9 @@ OS_Windows::OS_Windows(HINSTANCE _hInstance) {
 #ifdef WASAPI_ENABLED
 	AudioDriverManager::add_driver(&driver_wasapi);
 #endif
+#ifdef RTAUDIO_ENABLED
+	AudioDriverManager::add_driver(&driver_rtaudio);
+#endif
 #ifdef XAUDIO2_ENABLED
 	AudioDriverManager::add_driver(&driver_xaudio2);
 #endif

@@ -519,6 +519,17 @@ originally proposed by this library and better integrate this library with
 Godot. See the patch in the `patches` folder for details.
 
 
+## rtaudio
+
+- Upstream: http://www.music.mcgill.ca/~gary/rtaudio/
+- Version: 4.1.2
+- License: MIT-like
+
+Files extracted from upstream source:
+
+- `RtAudio.{cpp,h}`
+
+
 ## squish
 
 - Upstream: https://sourceforge.net/projects/libsquish
