@@ -88,10 +88,22 @@ int mbedtls_platform_entropy_poll( void *data, unsigned char *output, size_t len
         return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
     }
 
-    if ( !BCRYPT_SUCCESS( BCryptGenRandom( NULL, output, len_as_ulong, BCRYPT_USE_SYSTEM_PREFERRED_RNG ) ) )
+    HCRYPTPROV hCryptProv;
+
+    CryptAcquireContext(
+		&hCryptProv,
+		NULL,
+		(LPCWSTR)L"Microsoft Base Cryptographic Provider v1.0",
+		PROV_RSA_FULL,
+        CRYPT_VERIFYCONTEXT);
+
+    if (!CryptGenRandom(hCryptProv, len_as_ulong, output))
     {
+        CryptReleaseContext(hCryptProv, 0);
         return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
     }
+
+    CryptReleaseContext(hCryptProv, 0);
 
     *olen = len;
 

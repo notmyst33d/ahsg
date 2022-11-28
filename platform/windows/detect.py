@@ -267,7 +267,6 @@ def configure_msvc(env, manual_msvc_config):
         "dinput8",
         "dxguid",
         "imm32",
-        "bcrypt",
     ]
     env.Append(LINKFLAGS=[p + env["LIBSUFFIX"] for p in LIBS])
 
@@ -429,7 +428,6 @@ def configure_mingw(env):
             "dxguid",
             "ksuser",
             "imm32",
-            "bcrypt",
             "uuid",
         ]
     )
