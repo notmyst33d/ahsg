@@ -132,16 +132,12 @@ int mbedtls_platform_win32_vsnprintf( char *s, size_t n, const char *fmt, va_lis
     if( s == NULL || n == 0 || fmt == NULL )
         return( -1 );
 
-#if defined(_TRUNCATE)
-    ret = vsnprintf_s( s, n, _TRUNCATE, fmt, arg );
-#else
     ret = vsnprintf( s, n, fmt, arg );
     if( ret < 0 || (size_t) ret == n )
     {
         s[n-1] = '\0';
         ret = -1;
     }
-#endif
 
     return( ret );
 }
