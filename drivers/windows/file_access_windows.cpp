@@ -159,7 +159,11 @@ void FileAccessWindows::close() {
 				rename_error = _wrename((save_path + ".tmp").c_str(), save_path.c_str()) != 0;
 			} else {
 				//atomic replace for existing file
+#if _WIN32_WINNT < 0x0601
+				rename_error = !ReplaceFileW(save_path.c_str(), (save_path + ".tmp").c_str(), NULL, 2, NULL, NULL);
+#else
 				rename_error = !ReplaceFileW(save_path.c_str(), (save_path + ".tmp").c_str(), NULL, 2 | 4, NULL, NULL);
+#endif
 			}
 			if (rename_error) {
 				attempts--;
